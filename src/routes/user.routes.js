@@ -4,6 +4,8 @@ module.exports = (express, app) => {
 
   router.post('/login', controller.login)
 
+  router.post('/register', controller.register)
+
   app.use('/api/user', router)
 }
 
