@@ -1,4 +1,5 @@
-require('dotenv').config()
+const dotenv = require('dotenv')
+dotenv.config()
 const { Sequelize, DataTypes } = require('sequelize')
 
 const db = {}
@@ -21,7 +22,9 @@ db.sync = async () => {
 
 const seedData = async () => {
   await db.user.create({ user_id: 1, username: 'dummy', password: 'pass' })
+  await db.user.create({ user_id: 2, username: 'dummy two', password: 'pass two' })
   await db.task.create({ task_id: 1, title: 'dummy task', dueDate: '2022-01-20 10:49:28', userId: 1 })
+  await db.task.create({ task_id: 2, title: 'dummy task two', dueDate: '2022-02-20 10:49:28', userId: 2 })
 }
 
 module.exports = db
