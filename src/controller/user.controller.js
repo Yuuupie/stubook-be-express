@@ -8,9 +8,10 @@ exports.login = async (req, res) => {
     }
   })
 
-  if (account !== null && account.password !== req.body.password) {
+  if (account === null || account.password !== req.body.password) {
     res.status(401).json({ message: 'Incorrect credentials' })
   } else {
+    req.session.userId = account.id
     res.json({ message: 'Login Successful' })
   }
 }
