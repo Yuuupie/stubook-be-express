@@ -4,11 +4,11 @@ module.exports = (express, app) => {
 
   router.get('/', controller.fetch)
 
-  router.post('/create', controller.create)
+  router.post('/', controller.create)
 
-  router.put('/update', controller.update)
+  router.put('/', controller.update)
 
-  router.delete('/delete', controller.delete)
+  router.delete('/', controller.delete)
 
   app.use('/api/task', (req, res, next) => {
     if (req.session.userId === undefined) {
