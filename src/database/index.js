@@ -28,8 +28,9 @@ db.sync = async () => {
 const seedData = async () => {
   await db.user.create({ id: 1, username: 'dummy', password: 'pass' })
   await db.user.create({ id: 2, username: 'dummy two', password: 'pass two' })
-  await db.task.create({ id: 1, title: 'dummy task', dueDate: '2022-01-20 10:49:28', userId: 1 })
-  await db.task.create({ id: 2, title: 'dummy task two', dueDate: '2022-02-20 10:49:28', userId: 2 })
+  await db.task.create({ id: 1, title: 'dummy task', dueDate: '2022-01-20', userId: 1 })
+  await db.task.create({ id: 2, title: 'dummy task two', dueDate: '2022-02-20', userId: 2 })
+  await db.task.create({ id: 3, title: 'dummy task three', dueDate: '2022-02-20', userId: 2 })
   await db.tag.create({ taskId: 1, name: 'tag one' })
   await db.tag.create({ taskId: 2, name: 'tag two' })
   await db.tag.create({ taskId: 2, name: 'tag three' })

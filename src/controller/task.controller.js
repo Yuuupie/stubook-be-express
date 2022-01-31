@@ -1,12 +1,30 @@
 const db = require('../database/index')
 
 exports.fetch = async (req, res) => {
-  let tasks = await db.task.findAll({
+  let tasks = []
+
+  let taskRecords = await db.task.findAll({
     where: {
       userId: req.session.userId
-    }, 
-    include: db.tag
+    },
+    attributes: {
+      exclude: ['userId']
+    }
   })
+
+  await Promise.all(taskRecords.map(async (taskRecord) => {
+    let task = taskRecord.dataValues
+    let tagRecords = await db.tag.findAll({
+      where: {
+        taskId: task.id
+      },
+      attributes: ['name']
+    })
+    let tags = tagRecords.map((tagRecord) => {
+      return tagRecord.name
+    })
+    tasks.push({ ...task, tags})
+  }))
 
   res.json({ tasks })
 }
