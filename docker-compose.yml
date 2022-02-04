@@ -1,0 +1,17 @@
+services:
+  mariadb:
+    image: "mariadb:latest"
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_RANDOM_ROOT_PASSWORD: true
+      MARIADB_USER: "admin"
+      MARIADB_PASSWORD: "admin"
+      MARIADB_DATABASE: "stubook"
+  node:
+    build: .
+    ports:
+      - "4000:4000"
+    depends_on:
+      - "mariadb"
+
