@@ -15,3 +15,7 @@ services:
     depends_on:
       - "mariadb"
 
+networks:
+  default:
+    name: stubook
+
