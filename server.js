@@ -3,6 +3,8 @@ const db = require('./src/database')
 const express = require('express')
 const sessions = require('express-session')
 const cors = require('cors')
+const fs = require('fs')
+const https = require('https')
 
 db.sync()
 
@@ -18,7 +20,16 @@ app.use(sessions({
 require('./src/routes/user.routes.js')(express, app)
 require('./src/routes/task.routes.js')(express, app)
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`)
-})
+//app.listen(process.env.PORT, () => {
+//  console.log(`Server running on port ${process.env.PORT}`)
+//})
+
+const options = {
+  key: fs.readFileSync('./ssl/privkey.pem'),
+  cert: fs.readFileSync('./ssl/cert.pem')
+}
+
+https.createServer(options, app).listen(process.env.PORT, () => {
+  console.log("Express server listening on port " + process.env.PORT);
+});
 
