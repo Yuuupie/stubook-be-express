@@ -9,6 +9,5 @@ RUN npm ci
 COPY server.js .
 COPY .env .
 COPY src ./src
-COPY ssl ./ssl
 
 CMD ["node", "server.js"]

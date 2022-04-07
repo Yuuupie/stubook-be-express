@@ -25,8 +25,8 @@ require('./src/routes/task.routes.js')(express, app)
 //})
 
 const options = {
-  key: fs.readFileSync('./ssl/privkey.pem'),
-  cert: fs.readFileSync('./ssl/cert.pem')
+  key: fs.readFileSync('/etc/letsencrypt/live/yuuupie.xyz/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/yuuupie.xyz/cert.pem')
 }
 
 https.createServer(options, app).listen(process.env.PORT, () => {
