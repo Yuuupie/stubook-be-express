@@ -10,12 +10,14 @@ services:
       MARIADB_DATABASE: "stubook"
   node:
     build: .
+    environment:
+      NODE_ENV: "production"
     ports:
-      - "4000:4000"
+      - "4000:443"
     depends_on:
       - "mariadb"
     volumes:
-      - "/etc/letsencrypt:/etc/letsencrypt"
+      - "/etc/letsencrypt:/etc/letsencrypt:r"
 
 networks:
   default:
