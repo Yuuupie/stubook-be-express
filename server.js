@@ -4,6 +4,7 @@ if (process.env.NODE_ENV === 'production') {
 } else {
   require('dotenv').config()
 }
+
 const db = require('./src/database')
 const express = require('express')
 const sessions = require('express-session')
@@ -28,16 +29,20 @@ app.use(sessions({
 require('./src/routes/user.routes.js')(express, app)
 require('./src/routes/task.routes.js')(express, app)
 
-//app.listen(process.env.PORT, () => {
-//  console.log(`Server running on port ${process.env.PORT}`)
-//})
+if (process.env.NODE_ENV === 'production') {
+  const options = {
+    key: fs.readFileSync('/etc/letsencrypt/live/yuuupie.xyz/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/yuuupie.xyz/cert.pem')
+  }
 
-const options = {
-  key: fs.readFileSync('/etc/letsencrypt/live/yuuupie.xyz/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/yuuupie.xyz/cert.pem')
+  https.createServer(options, app).listen(process.env.PORT, () => {
+    console.log(`Server running on port ${process.env.PORT}`);
+  })
+
+} else {
+  app.listen(process.env.PORT, () => {
+    console.log(`Server running on port ${process.env.PORT}`)
+  })
 }
 
-https.createServer(options, app).listen(process.env.PORT, () => {
-  console.log("Express server listening on port " + process.env.PORT);
-});
 

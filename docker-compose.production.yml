@@ -1,0 +1,6 @@
+services:
+  node:
+    environment:
+      NODE_ENV: "production"
+    volumes:
+      - "/etc/letsencrypt:/etc/letsencrypt:r"
