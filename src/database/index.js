@@ -14,9 +14,11 @@ db.tag = require('./models/tag.model.js')(db.sequelize, DataTypes)
 
 db.tag.removeAttribute('id')
 
+// user-to-task is one-to-many
 db.user.hasMany(db.task)
 db.task.belongsTo(db.user)
 
+// task-to-tag is one-to-many
 db.task.hasMany(db.tag)
 db.tag.belongsTo(db.task)
 

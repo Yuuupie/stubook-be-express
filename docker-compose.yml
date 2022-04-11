@@ -11,6 +11,7 @@ services:
   node:
     build: .
     environment:
+      # DB_HOST here overrides DB_HOST in .env so that node container connects to mariadb container
       DB_HOST: "mariadb"
     ports:
       - "4000:${PORT}"

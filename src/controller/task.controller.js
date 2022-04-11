@@ -1,8 +1,12 @@
 const db = require('../database/index')
 
+/**
+ * Retrieve all tasks belonging to the logged in user
+ */
 exports.fetch = async (req, res) => {
   let tasks = []
 
+  // Get task records
   let taskRecords = await db.task.findAll({
     where: {
       userId: req.session.userId
@@ -12,6 +16,7 @@ exports.fetch = async (req, res) => {
     }
   })
 
+  // Retrieve and map tags to their tasks
   await Promise.all(taskRecords.map(async (taskRecord) => {
     let task = taskRecord.dataValues
     let tagRecords = await db.tag.findAll({
@@ -29,6 +34,9 @@ exports.fetch = async (req, res) => {
   res.json({ tasks })
 }
 
+/**
+ * Create task
+ */
 exports.create = async (req, res) => {
   try {
     await db.task.create({
@@ -48,11 +56,16 @@ exports.create = async (req, res) => {
   }
 }
 
+/**
+ * Update task. 
+ *
+ * For instances where tags are updated, the SQL records with the old tag names are deleted and new records with the new tag names are created.
+ */
 exports.update = async (req, res) => {
   try {
     let newTags = [...req.body.tags]
 
-    // Update 'task' model
+    // Update 'task' table
     await db.task.update({
       title: req.body.title,
       dueDate: req.body.dueDate
@@ -62,13 +75,13 @@ exports.update = async (req, res) => {
       }
     })
 
-    // Update 'tag' model
     let currentTags = await db.tag.findAll({
       where: {
         taskId: req.body.id
       }
     })
 
+    // Delete tags that no longer exist (either deleted or renamed)
     await Promise.all(currentTags.map(async (currentTag) => {
       let currentTagName = currentTag.dataValues.name
       if (!(newTags.includes(currentTagName))) {
@@ -83,6 +96,7 @@ exports.update = async (req, res) => {
       }
     }))
 
+    // Add new tags (including updated ones)
     await Promise.all(newTags.map(async (tag) => {
       await db.tag.create({
         name: tag,
@@ -97,6 +111,9 @@ exports.update = async (req, res) => {
   }
 }
 
+/**
+ * Delete task
+ */
 exports.delete = async (req, res) => {
   try {
     await db.task.destroy({

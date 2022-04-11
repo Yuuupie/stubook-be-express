@@ -1,6 +1,9 @@
 const db = require('../database/index')
 const { Sequelize } = require('sequelize')
 
+/**
+ * Looks for account with passed in parameters username and password, and returns session token if successful
+ */
 exports.login = async (req, res) => {
   let account = await db.user.findOne({
     where: {
@@ -16,6 +19,9 @@ exports.login = async (req, res) => {
   }
 }
 
+/**
+ * Creates account with passed in parameters username and password. Throws error if account with username already exists.
+ */
 exports.register = async (req, res) => {
   try {
     await db.user.create({ username: req.body.username, password: req.body.password })

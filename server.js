@@ -5,17 +5,18 @@ if (process.env.NODE_ENV === 'production') {
   require('dotenv').config()
 }
 
-const db = require('./src/database')
 const express = require('express')
 const sessions = require('express-session')
 const cors = require('cors')
 const fs = require('fs')
 const yaml = require('js-yaml')
 const https = require('https')
+const db = require('./src/database')
+
+// Sync mariadb tables with sequelize models in src/, and seed data with dummy values
+db.sync()
 
 const secrets = yaml.load(fs.readFileSync("secrets.yml"))
-
-db.sync()
 
 const app = express();
 app.use(express.json())
@@ -29,6 +30,7 @@ app.use(sessions({
 require('./src/routes/user.routes.js')(express, app)
 require('./src/routes/task.routes.js')(express, app)
 
+// Load SSL for prod
 if (process.env.NODE_ENV === 'production') {
   const options = {
     key: fs.readFileSync('/etc/letsencrypt/live/yuuupie.xyz/privkey.pem'),
